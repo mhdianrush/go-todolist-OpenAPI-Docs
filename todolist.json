@@ -1,0 +1,501 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "ToDoList Restful API",
+    "version": "1",
+    "description": "OpenAPI for ToDoList Restful API",
+    "termsOfService": "https://www.programmerzamannow.com",
+    "contact": {
+      "name": "Muhammad Ian Rush",
+      "email": "mhdianrush@gmail.com",
+      "url": "https://www.programmerzamannow.com"
+    },
+    "license": {
+      "name": "APACHE 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "servers": [
+    {
+      "description": "ToDoList Restful API Server",
+      "url": "https://{environment}.programmerzamannow.com/api/v1",
+      "variables": {
+        "environment": {
+          "description": "Server Environment",
+          "default": "dev",
+          "enum": ["dev", "qa", "prod"]
+        }
+      }
+    }
+  ],
+  "externalDocs": {
+    "description": "Youtube Programmer Zaman Now",
+    "url": "https://www.youtube.com/c/ProgrammerZamanNow"
+  },
+  "components": {
+    "securitySchemes": {
+      "ToDoListAuth": {
+        "description": "Authentication for Todolist Restful API",
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    },
+    "parameters": {
+      "TodolistId": {
+        "name": "todolistId",
+        "in": "path",
+        "required": true,
+        "description": "ToDoList Id For Updated",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "examples": {
+          "Django": {
+            "description": "Example ToDoList Django",
+            "value": "1"
+          },
+          "Laravel": {
+            "description": "Example ToDoList Laravel",
+            "value": "2"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Todolist": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number",
+            "format": "int32"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateOrUpdateTodolist": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number",
+            "format": "int32"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ArrayTodolist": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Todolist"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/todolist": {
+      "get": {
+        "security": [
+          {
+            "ToDoListAuth": []
+          }
+        ],
+        "tags": ["ToDoList"],
+        "summary": "Get All ToDoList",
+        "description": "Get All Active ToDoList",
+        "responses": {
+          "200": {
+            "description": "Success Get All ToDoList",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "priority": {
+                        "type": "number",
+                        "format": "int32"
+                      },
+                      "tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "description": "Success Get All ToDoList",
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Go-Language",
+                        "priority": 1,
+                        "tags": ["Go", "Programming", "Language"]
+                      },
+                      {
+                        "id": "2",
+                        "name": "PHP",
+                        "priority": 2,
+                        "tags": ["PHP", "Programming", "Language"]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Include_Done",
+            "in": "query",
+            "required": false,
+            "description": "Is Include Done ToDoList",
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "nullable": true
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Filter ToDoList By Name",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "examples": {
+              "Golang": {
+                "value": "golang",
+                "description": "Go Language"
+              },
+              "Python": {
+                "value": "python",
+                "description": "Python Programming Language"
+              }
+            }
+          }
+        ]
+      },
+      "post": {
+        "security": [
+          {
+            "ToDoListAuth": []
+          }
+        ],
+        "tags": ["ToDoList"],
+        "summary": "Create New ToDoList",
+        "description": "Create New ToDoList To Database",
+        "responses": {
+          "200": {
+            "description": "Success Create ToDoList",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "priority": {
+                        "type": "number",
+                        "format": "int32"
+                      },
+                      "tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Framework": {
+                    "description": "Create Framework",
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Node JS",
+                        "priority": 1,
+                        "tags": ["JS", "Programming", "Language"]
+                      },
+                      {
+                        "id": "2",
+                        "name": "Flask",
+                        "priority": 2,
+                        "tags": ["Python", "Programming", "Language"]
+                      }
+                    ]
+                  },
+                  "Library": {
+                    "description": "Create Python Library",
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Numpy",
+                        "priority": 1,
+                        "tags": ["Numpy", "Library"]
+                      },
+                      {
+                        "id": "2",
+                        "name": "Pandas",
+                        "priority": 2,
+                        "tags": ["Pandas", "Library"]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateTodolist"
+              },
+              "examples": {
+                "Golang": {
+                  "description": "Create ToDoList Golang",
+                  "value": {
+                    "name": "golang",
+                    "priority": 3,
+                    "tags": ["Golang", "Programming", "Language"]
+                  }
+                },
+                "JavaScript": {
+                  "description": "Create ToDoList JavaScript",
+                  "value": {
+                    "name": "javascript",
+                    "priority": 2,
+                    "tags": ["JavaScript", "Programming", "Language"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todolist/{todolistId}": {
+      "delete": {
+        "security": [
+          {
+            "ToDoListAuth": []
+          }
+        ],
+        "tags": ["ToDoList-Id"],
+        "summary": "Delete Existing ToDoList",
+        "description": "Delete Existing Todolist In Database",
+        "responses": {
+          "200": {
+            "description": "Success Delete ToDoList",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "description": "Success Delete ToDoList",
+                    "value": {
+                      "success": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed Delete Not Found ToDoList",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "examples": {
+                  "failed": {
+                    "description": "Failed Delete Not Found ToDoList",
+                    "value": {
+                      "success": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TodolistId"
+          }
+        ]
+      },
+      "put": {
+        "security": [
+          {
+            "ToDoListAuth": []
+          }
+        ],
+        "tags": ["ToDoList-Id"],
+        "summary": "Update Existing Todolist",
+        "description": "Update Existing Todolist In Database",
+        "responses": {
+          "200": {
+            "description": "Success Update ToDoList",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayTodolist"
+                },
+                "examples": {
+                  "Framework": {
+                    "description": "Update Framework",
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "React JS",
+                        "priority": 1,
+                        "tags": ["JS", "Programming", "Language"]
+                      },
+                      {
+                        "id": "2",
+                        "name": "Fiber",
+                        "priority": 2,
+                        "tags": ["Golang", "Programming", "Language"]
+                      }
+                    ]
+                  },
+                  "Library": {
+                    "description": "Update Golang Library",
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Echo",
+                        "priority": 1,
+                        "tags": ["Echo", "Library"]
+                      },
+                      {
+                        "id": "2",
+                        "name": "Gin",
+                        "priority": 2,
+                        "tags": ["Gin", "Library"]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TodolistId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "required": ["true"]
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 1,
+                    "required": ["true"]
+                  },
+                  "tags": {
+                    "type": "array",
+                    "required": ["false"],
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "Ruby": {
+                  "description": "Create ToDoList Ruby",
+                  "value": {
+                    "name": "ruby",
+                    "priority": 3,
+                    "tags": ["Ruby", "Programming", "Language"]
+                  }
+                },
+                "Java": {
+                  "description": "Create ToDoList Java",
+                  "value": {
+                    "name": "java",
+                    "priority": 2,
+                    "tags": ["Java", "Programming", "Language"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

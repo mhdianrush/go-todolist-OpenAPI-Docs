@@ -1,0 +1,422 @@
+openapi: 3.0.2
+info:
+  title: ToDoList Restful API
+  description: OpenAPI for ToDoList Restful API
+  termsOfService: https://www.programmerzamannow.com
+  contact:
+    name: Muhammad Ian Rush
+    url: https://www.programmerzamannow.com
+    email: mhdianrush@gmail.com
+  license:
+    name: APACHE 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: "1"
+externalDocs:
+  description: Youtube Programmer Zaman Now
+  url: https://www.youtube.com/c/ProgrammerZamanNow
+servers:
+- url: "https://{environment}.programmerzamannow.com/api/v1"
+  description: ToDoList Restful API Server
+  variables:
+    environment:
+      description: Server Environment
+      default: dev
+      enum:
+      - dev
+      - qa
+      - prod
+paths:
+  /todolist:
+    get:
+      tags:
+      - ToDoList
+      summary: Get All ToDoList
+      description: Get All Active ToDoList
+      parameters:
+      - name: Include_Done
+        in: query
+        description: Is Include Done ToDoList
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          nullable: true
+          default: true
+      - name: name
+        in: query
+        description: Filter ToDoList By Name
+        required: false
+        style: form
+        explode: true
+        schema:
+          maxLength: 100
+          minLength: 1
+          type: string
+        examples:
+          Golang:
+            description: Go Language
+            value: golang
+          Python:
+            description: Python Programming Language
+            value: python
+      responses:
+        "200":
+          description: Success Get All ToDoList
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+              examples:
+                success:
+                  description: Success Get All ToDoList
+                  value:
+                  - id: "1"
+                    name: Go-Language
+                    priority: 1
+                    tags:
+                    - Go
+                    - Programming
+                    - Language
+                  - id: "2"
+                    name: PHP
+                    priority: 2
+                    tags:
+                    - PHP
+                    - Programming
+                    - Language
+      security:
+      - ToDoListAuth: []
+    post:
+      tags:
+      - ToDoList
+      summary: Create New ToDoList
+      description: Create New ToDoList To Database
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateTodolist'
+            examples:
+              Golang:
+                description: Create ToDoList Golang
+                value:
+                  name: golang
+                  priority: 3
+                  tags:
+                  - Golang
+                  - Programming
+                  - Language
+              JavaScript:
+                description: Create ToDoList JavaScript
+                value:
+                  name: javascript
+                  priority: 2
+                  tags:
+                  - JavaScript
+                  - Programming
+                  - Language
+        required: true
+      responses:
+        "200":
+          description: Success Create ToDoList
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+              examples:
+                Framework:
+                  description: Create Framework
+                  value:
+                  - id: "1"
+                    name: Node JS
+                    priority: 1
+                    tags:
+                    - JS
+                    - Programming
+                    - Language
+                  - id: "2"
+                    name: Flask
+                    priority: 2
+                    tags:
+                    - Python
+                    - Programming
+                    - Language
+                Library:
+                  description: Create Python Library
+                  value:
+                  - id: "1"
+                    name: Numpy
+                    priority: 1
+                    tags:
+                    - Numpy
+                    - Library
+                  - id: "2"
+                    name: Pandas
+                    priority: 2
+                    tags:
+                    - Pandas
+                    - Library
+      security:
+      - ToDoListAuth: []
+  /todolist/{todolistId}:
+    put:
+      tags:
+      - ToDoList-Id
+      summary: Update Existing Todolist
+      description: Update Existing Todolist In Database
+      parameters:
+      - name: todolistId
+        in: path
+        description: ToDoList Id For Updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 100
+          minLength: 1
+          type: string
+        examples:
+          Django:
+            description: Example ToDoList Django
+            value: "1"
+          Laravel:
+            description: Example ToDoList Laravel
+            value: "2"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todolist_todolistId_body'
+            examples:
+              Ruby:
+                description: Create ToDoList Ruby
+                value:
+                  name: ruby
+                  priority: 3
+                  tags:
+                  - Ruby
+                  - Programming
+                  - Language
+              Java:
+                description: Create ToDoList Java
+                value:
+                  name: java
+                  priority: 2
+                  tags:
+                  - Java
+                  - Programming
+                  - Language
+        required: true
+      responses:
+        "200":
+          description: Success Update ToDoList
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayTodolist'
+              examples:
+                Framework:
+                  description: Update Framework
+                  value:
+                  - id: "1"
+                    name: React JS
+                    priority: 1
+                    tags:
+                    - JS
+                    - Programming
+                    - Language
+                  - id: "2"
+                    name: Fiber
+                    priority: 2
+                    tags:
+                    - Golang
+                    - Programming
+                    - Language
+                Library:
+                  description: Update Golang Library
+                  value:
+                  - id: "1"
+                    name: Echo
+                    priority: 1
+                    tags:
+                    - Echo
+                    - Library
+                  - id: "2"
+                    name: Gin
+                    priority: 2
+                    tags:
+                    - Gin
+                    - Library
+      security:
+      - ToDoListAuth: []
+    delete:
+      tags:
+      - ToDoList-Id
+      summary: Delete Existing ToDoList
+      description: Delete Existing Todolist In Database
+      parameters:
+      - name: todolistId
+        in: path
+        description: ToDoList Id For Updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 100
+          minLength: 1
+          type: string
+        examples:
+          Django:
+            description: Example ToDoList Django
+            value: "1"
+          Laravel:
+            description: Example ToDoList Laravel
+            value: "2"
+      responses:
+        "200":
+          description: Success Delete ToDoList
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                success:
+                  description: Success Delete ToDoList
+                  value:
+                    success: true
+        "404":
+          description: Failed Delete Not Found ToDoList
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                failed:
+                  description: Failed Delete Not Found ToDoList
+                  value:
+                    success: false
+      security:
+      - ToDoListAuth: []
+components:
+  schemas:
+    Todolist:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        priority:
+          type: number
+          format: int32
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        name: name
+        id: id
+        priority: 0.80082819046101150206595775671303272247314453125
+        tags:
+        - tags
+        - tags
+    CreateOrUpdateTodolist:
+      type: object
+      properties:
+        name:
+          type: string
+        priority:
+          type: number
+          format: int32
+        tags:
+          type: array
+          items:
+            type: string
+    ArrayTodolist:
+      type: array
+      items:
+        $ref: '#/components/schemas/Todolist'
+      x-schema-name: ArrayTodolist
+    inline_response_200:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        priority:
+          type: number
+          format: int32
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        name: name
+        id: id
+        priority: 0.80082819046101150206595775671303272247314453125
+        tags:
+        - tags
+        - tags
+    todolist_todolistId_body:
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 1
+          required:
+          - "true"
+          type: string
+        priority:
+          minimum: 1
+          required:
+          - "true"
+          type: integer
+          format: int32
+        tags:
+          minItems: 1
+          required:
+          - "false"
+          type: array
+          items:
+            minLength: 1
+            type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        success:
+          type: boolean
+      example:
+        success: true
+  parameters:
+    TodolistId:
+      name: todolistId
+      in: path
+      description: ToDoList Id For Updated
+      required: true
+      style: simple
+      explode: false
+      schema:
+        maxLength: 100
+        minLength: 1
+        type: string
+      examples:
+        Django:
+          description: Example ToDoList Django
+          value: "1"
+        Laravel:
+          description: Example ToDoList Laravel
+          value: "2"
+  securitySchemes:
+    ToDoListAuth:
+      type: apiKey
+      description: Authentication for Todolist Restful API
+      name: X-API-Key
+      in: header
